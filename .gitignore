@@ -1,3 +1,14 @@
+# Gizli bilgiler
 .env
-*.log
+*.pem
+*.key
+
+# Değerlendirme önbelleği (yeniden üretilebilir)
+eval/cache.json
+
+# Python / editör / sistem
 __pycache__/
+*.pyc
+.vscode/
+.DS_Store
+*.log

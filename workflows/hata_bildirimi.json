@@ -1,0 +1,92 @@
+{
+  "name": "Hata Bildirimi",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "264a2f54-a446-4ae0-9b0c-0a89ccb8ae5b",
+      "name": "Hata Bildirimi"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Telegram'ın biçimlendirme karakterlerini temizle (mesaj bozulmasın)\nconst temiz = (s) => String(s ?? '-').replace(/[<>_*`\\[\\]]/g, ' ').slice(0, 300);\n\nconst e = $json.execution || {};\nconst w = $json.workflow || {};\n\nreturn {\n  json: {\n    metin:\n`🔴 WORKFLOW HATASI\nWorkflow: ${temiz(w.name)}\nHata veren node: ${temiz(e.lastNodeExecuted)}\nMesaj: ${temiz(e.error && e.error.message)}\nÇalışma no: ${temiz(e.id)}`\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "36eec12f-7c6d-43ce-98d8-948e6339b6c0",
+      "name": "Hata Metni"
+    },
+    {
+      "parameters": {
+        "chatId": "CHAT_ID_BURAYA",
+        "text": "={{ $json.metin }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "bf95e8b8-5638-46ae-a289-5285958ba421",
+      "name": "Telegram Hata",
+      "webhookId": "8354fc07-e53c-4f00-9096-50e87c7ec708",
+      "credentials": {
+        "telegramApi": {
+          "id": "99AyEhuGxVdjWIq3",
+          "name": "Telegram Bot"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Hata Bildirimi": {
+      "main": [
+        [
+          {
+            "node": "Hata Metni",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hata Metni": {
+      "main": [
+        [
+          {
+            "node": "Telegram Hata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "19eed26f-c321-4362-9286-8d4381b2ed41",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1ca7f59df46cb07967b85bff85ed576d9fba2a99bb0e2df22e9fb2a3de93a676"
+  },
+  "nodeGroups": [],
+  "id": "YWFvdmkvNRBPe3TZ",
+  "tags": []
+}

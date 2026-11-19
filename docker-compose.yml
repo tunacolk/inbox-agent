@@ -1,4 +1,16 @@
 services:
+  erp-db:
+    image: postgres:16
+    container_name: erp-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=erp_admin
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=erp
+    volumes:
+      - erp_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+
   n8n:
     image: n8nio/n8n:latest
     container_name: n8n
@@ -10,6 +22,9 @@ services:
       - TZ=Europe/Istanbul
     volumes:
       - n8n_data:/home/node/.n8n
+    depends_on:
+      - erp-db
 
 volumes:
   n8n_data:
+  erp_data:
