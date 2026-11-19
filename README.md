@@ -108,25 +108,6 @@ python eval/evaluate.py --veri data/test_emails_holdout.json --ad holdout # bağ
 
 Rapor `eval/rapor.md` ve `eval/rapor_holdout.md` olarak yazılır. Sonuçlar önbelleklenir, kesilen bir çalışma kaldığı yerden devam eder. `eval/classifier_prompt.txt`, n8n'deki `Hazirla` node'undaki prompt ile birebir aynı olmalıdır (n8n'e yapıştırılabilir hâli `workflows/hazirla_code.js`).
 
-## Bilinen sınırlamalar
-
-- **Veri sınırı saldırısı çözülmedi.** Bağımsız setteki tek kaçan saldırı, e-posta içine `</email>` yazıp sahte bir "SISTEM:" mesajı ekleyerek veri sınırını kapatmaya çalışan saldırıydı. Sınıflandırma bundan etkilenmedi ama e-posta şüpheli işaretlenmedi. Olası bir çözüm, e-posta içindeki bu etiketleri koddan temizleyip e-postayı doğrudan şüpheli sayan deterministik bir kontroldür; henüz eklenmedi.
-- **Gönderen adresi sahtelenebilir (spoofing).** Gönderen doğrulaması yalnızca "Gönderen" adresine bakar. Gerçek bir ortamda SPF/DKIM/DMARC sonuçları da kontrol edilmelidir.
-- **Eşzamanlı e-postalar.** AI Agent dalında satır eşleştirme `.first()` ile yapılıyor; aynı dakikada iki soru e-postası gelirse taslak yanlış kişi için hazırlanabilir. Taslaklar gönderilmediği için etkisi sınırlıdır. Kalıcı çözüm, her e-postayı ayrı bir alt workflow'da işlemektir.
-- **Elle yeniden çalıştırma.** Aynı e-postayı elle tekrar çalıştırmak kayıtları çoğaltmaz ama ikinci bir taslak ve bildirim üretir.
-- **Ürün arama basit.** Agent ürünleri `ILIKE` ile ada göre arar; farklı kelime sırası veya yazım biçimleri bulunamayabilir.
-- **Küçük ve tek kişi tarafından yazılmış test setleri.** Bazı sınırdaki örnekler (örneğin şikayet ile durum sorusu) tartışmalıdır.
-- **Ücretsiz API katmanı sınırları.** Groq ücretsiz katmanının dakikalık/günlük token limitleri kullanım hacmini sınırlar.
-- **Gerçek ERP bağlantısı yok.** CANIAS gibi bir ERP'nin yerine sentetik bir PostgreSQL şeması kullanıldı.
-
-## Yol haritası
-
-- Veri sınırı saldırısına karşı deterministik e-posta etiketi temizleme
-- Microsoft Outlook düğümüyle aynı akışın ikinci bir platformda çalıştırılması
-- Gerçek ERP için REST/ODBC bağlayıcı katmanı (şu an yalnızca sentetik şema)
-- Aynı dakikada gelen e-postalar için alt workflow'a geçiş
-- SPF/DKIM sonuçlarına dayalı gönderen doğrulaması
-
 ## Lisans
 
 MIT. Ayrıntılar için `LICENSE` dosyasına bakın.
