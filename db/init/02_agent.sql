@@ -52,3 +52,6 @@ INSERT INTO sss (kategori, soru, cevap) VALUES
 -- En az yetki: agent yalnızca ürün/stok/SSS okuyabilir, müşteri ve sipariş verisini göremez
 REVOKE ALL ON musteriler, siparisler FROM agent_readonly;
 GRANT SELECT ON urunler, stok, sss TO agent_readonly;
+ALTER ROLE agent_readonly SET statement_timeout = '5s';
+ALTER ROLE agent_readonly CONNECTION LIMIT 3;
+
