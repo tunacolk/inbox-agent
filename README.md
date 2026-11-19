@@ -60,7 +60,7 @@ n8n (Docker) · Groq API (`openai/gpt-oss-120b`) · PostgreSQL 16 · Gmail API (
 Gereken: Docker Desktop, bir Gmail test hesabı (kişisel hesabınızı kullanmayın), Groq API anahtarı, Telegram botu.
 
 ```bash
-git clone https://github.com/<kullanici-adi>/inbox-agent.git
+git clone https://github.com/tunacolk/inbox-agent.git
 cd inbox-agent
 cp .env.example .env        # değerleri doldurun
 docker compose up -d
